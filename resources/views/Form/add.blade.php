@@ -119,7 +119,7 @@
     <div class="modal-footer bg-whitesmoke br">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary" onclick="send();">Save</button>
-        <button type="button" class="btn btn-primary" onclick="validasi();">Show Data</button>
+        {{--<button type="button" class="btn btn-primary" onclick="validasi();">Show Data</button>--}}
         </div>
     </div>
     </div>

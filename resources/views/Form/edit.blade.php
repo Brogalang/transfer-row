@@ -66,14 +66,16 @@
                         <th>No</th>
                         <th>Nama</th>
                         <th>Qty</th>
+                        <th>Action</th>
                     </tr>	
                 </thead>
-                <tbody>
+                <tbody id="bodytable2">
                     @foreach($itemUnit as $key => $val)
                         <tr>
                             <td>{{$i}}</td>
-                            <td>{{$val->name}}<input type="text" id="name[{{$i}}]" name="name[{{$i}}]" value="{{$val->name}}" class="form-control" hidden></td>
-                            <th><input type="text" id="idput[{{$i}}]" name="idput[{{$i}}]" value="{{$val->Qty}}" class="form-control"></th>
+                            <td>{{$val->name}}<input type="text" id="name[]" name="name[]" value="{{$val->name}}" class="form-control" hidden></td>
+                            <th><input type="text" id="idput[]" name="idput[]" value="{{$val->Qty}}" class="form-control"></th>
+                            <th><a class="btn btn-danger" onclick="deleteDetail({{$i}})"><i class="fa fa-times"></i></a></th>
                             <th hidden>{{$i++}}</th>
                         </tr>
                     @endforeach
@@ -113,10 +115,11 @@
             <tbody>
                 @foreach($list as $key => $val)
                     <tr>
-                        <td>{{$j++}} <input type="text" id="nameEdit[]" name="nameEdit[]" value="{{$val->name}}" hidden></td>
+                        <td>{{$j++}} <input type="text" id="name[]" name="name[]" value="{{$val->name}}" hidden></td>
                         <td>{{$val->name}}</td>
                         <th><input type="checkbox" id="check" name="checkbox"></th>
-                        <th hidden><input type="text" id="idputEdit[]" name="idputEdit[]" class="form-control"></th>
+                        <th hidden><input type="text" id="idput[]" name="idput[]" class="form-control"></th>
+                        <th hidden><a class="btn btn-danger" onclick="deleteDetail({{$i}})"><i class="fa fa-times"></i></a></th>
                     </tr>
                 @endforeach
             </tbody>
@@ -125,7 +128,7 @@
     <div class="modal-footer bg-whitesmoke br">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary" onclick="send();">Save</button>
-        <button type="button" class="btn btn-primary" onclick="validasi();">Show Data</button>
+        {{--<button type="button" class="btn btn-primary" onclick="validasi();">Show Data</button>--}}
         </div>
     </div>
     </div>
@@ -166,12 +169,35 @@
             var Cell1 = newRow.insertCell(0);
             var Cell2 = newRow.insertCell(1);
             var Cell3 = newRow.insertCell(2);
+            var Cell4 = newRow.insertCell(3);
             var inputcol="<input type='text' id='inp' name='inp'>";
             Cell1.innerHTML = table1.rows[i + 1].cells[0].innerHTML;
             Cell2.innerHTML = table1.rows[i + 1].cells[1].innerHTML;
             Cell3.innerHTML = table1.rows[i + 1].cells[3].innerHTML;
+            Cell4.innerHTML = table1.rows[i + 1].cells[4].innerHTML;
           }
         }
       }
+    function deleteDetail(id){
+        var table2 = document.getElementById("table2");
+        var body2 = document.getElementById("bodytable2");
+        const table = Array.from(table2.querySelectorAll("tr"), (tr) =>
+          Array.from(tr.querySelectorAll("td"), (td) => td.textContent)
+        );
+        // body2.deleteRow(-1);
+        // var row = document.getElementById(id);
+        // table[id].remove();
+        // var del=body2.rows[id];
+        // alert(id);
+        // alert(body2.rows.length);
+        alert(id);
+        if (body2.rows.length<=1) {
+            body2.deleteRow(0);
+        }else{
+            body2.deleteRow(id-1);
+        }
+        // del.deleteRow(del.rows.length);
+
+    }
 </script>
 @endpush

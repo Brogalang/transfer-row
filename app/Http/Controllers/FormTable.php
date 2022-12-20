@@ -119,7 +119,7 @@ class FormTable extends Controller
     public function update(Request $request, $id)
     {
         // echo"<pre>";
-        // print_r($request->nameEdit);
+        // print_r($request->name);
         // die();
         DB::statement("UPDATE m_item SET  Code = '".$request->code."',Name = '".$request->nameinpt."',id_category='".$request->kategori."',Brand='".$request->brand."' WHERE id = '".$id."' ");
         if($request->file('image')){
@@ -133,23 +133,32 @@ class FormTable extends Controller
             $file-> move(public_path('public/Image'), $filename);
             DB::statement("UPDATE postimages SET  image = '".$filename."' WHERE id_header = '".$id."' ");
         }
-        if ($request->nameEdit) {
-            $untilEdit=count($request->nameEdit);
-            for ($i=0; $i <$untilEdit ; $i++) { 
+        // if ($request->nameEdit) {
+        //     $untilEdit=count($request->nameEdit);
+        //     for ($i=0; $i <$untilEdit ; $i++) { 
+        //         M_ItemUnit::insert([
+        //             'Code' => $request->code,
+        //             'name' => $request->nameEdit[$i],
+        //             'id_Project' => $id,
+        //             'Qty' => $request->idputEdit[$i],
+        //             'created_at' => date('Y-m-d h:i:s'),
+        //             'updated_at' => date('Y-m-d h:i:s')
+        //         ]);
+        //     }
+        // }
+        if ($request->name) {
+            M_ItemUnit::where('id_Project', '=', $id)->delete();
+            $until=count($request->name);
+            for ($i=0; $i <$until ; $i++) { 
                 M_ItemUnit::insert([
                     'Code' => $request->code,
-                    'name' => $request->nameEdit[$i],
+                    'name' => $request->name[$i],
                     'id_Project' => $id,
-                    'Qty' => $request->idputEdit[$i],
+                    'Qty' => $request->idput[$i],
                     'created_at' => date('Y-m-d h:i:s'),
                     'updated_at' => date('Y-m-d h:i:s')
                 ]);
-            }
-        }
-        if ($request->name) {
-            $until=count($request->name);
-            for ($i=1; $i <=$until ; $i++) { 
-                DB::statement("UPDATE m__item_unit SET  Code = '".$request->code."',Qty='".$request->idput[$i]."' WHERE id_Project = '".$id."' AND name = '".$request->name[$i]."' ");
+                // DB::statement("UPDATE m__item_unit SET  Code = '".$request->code."',Qty='".$request->idput[$i]."' WHERE id_Project = '".$id."' AND name = '".$request->name[$i]."' ");
             }
         }
         return redirect()->route('formtable.index')
