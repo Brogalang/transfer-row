@@ -23,9 +23,9 @@
             <th>Code</th>
             <th>Name</th>
             <th>Kategori</th>
-            <th>Description</th>
             <th>Brand</th>
             <th>Detail</th>
+            <th>Image</th>
             <th>Action</th>
             </tr>
         </thead>
@@ -35,17 +35,38 @@
             <td style="text-align:left">{{ ++$i }}</td>
             <td>{{$val->Code}}</td>
             <td>{{$val->Name}}</td>
-            <td>{{$val->id_category}}</td>
-            <td>{{$val->Description}}</td>
-            <td>{{$val->Brand}}</td>
+            <td>{{$val->name_kategori}}</td>
             <td>{{$val->Brand}}</td>
             <td>
-                {{--<form action="{{ route('divisi.destroy',$val->id) }}" method="POST">
+                @foreach($itemUnit as $key => $unit)
+                @if($val->id==$unit->id_Project)
+                    <table>
+                        <tr>
+                            <td>
+                                {{$unit->name}}
+                            </td>
+                            <td>
+                                =
+                            </td>
+                            <td>
+                                {{$unit->Qty}}
+                            </td>
+                        </tr>
+                    </table>
+                @endif
+                @endforeach
+            </td>
+            <td>
+                <img src="{{ url('public/Image/'.$val->image) }}" style="height: 100px; width: 150px;">
+            </td>
+            
+            <td>
+                <form action="{{ route('formtable.destroy',$val->id) }}" method="POST">
                     @csrf
-                    @method('DELETE')--}}
+                    @method('DELETE')
                         <a class="btn btn-info" href="{{ route('formtable.edit',$val->id) }}" ><i class="fa fa-edit" title="Edit Data"></i></a>
-                        {{--<button type="submit" class="btn btn-danger" onclick="deletediv('{{$val->id}}')"><i class="fa fa-trash" title="Delete Data"></i></button>--}}
-                {{--</form>--}}
+                        <button type="submit" class="btn btn-danger")"><i class="fa fa-trash" title="Delete Data"></i></button>
+                </form>
             </td>
         </tr>
         @endforeach

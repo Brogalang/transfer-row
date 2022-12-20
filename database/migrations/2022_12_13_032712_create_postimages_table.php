@@ -15,6 +15,7 @@ class CreatePostimagesTable extends Migration
     {
         Schema::create('postimages', function (Blueprint $table) {
             $table->id();
+            $table->integer('id_header');
             $table->string('image')->nullable();
             $table->integer('created_by')->nullable();
             $table->integer('updated_by')->nullable();

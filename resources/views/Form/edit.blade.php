@@ -6,74 +6,81 @@
     <div class="section-header-breadcrumb">
     <div class="breadcrumb-item active"><a href="{{route('home')}}">Dashboard</a></div>
     <div class="breadcrumb-item"><a href="{{route('formtable.index')}}">Data</a></div>
-    <div class="breadcrumb-item">Add</div>
+    <div class="breadcrumb-item">Edit</div>
     </div>
 </div>
 
 <div class="section-body">
 <div class="card">
-    <form class="needs-validation" action="{{ route('formtable.store') }}" method="POST" enctype="multipart/form-data">
+    <form class="needs-validation" action="{{ route('formtable.update',$item->id) }}" method="POST" enctype="multipart/form-data">
     @csrf
+    @method('PUT')
     <div class="card-header">
-        <h4>Tambah Data Header</h4>
+        <h4>Tambah Data</h4>
     </div>
-    
     <div class="card-body">
         <div class="form-group">
-                <div class="row">
-                    <div class="col-sm-2">
-                        <label>Code</label>
-                        <input type="text" class="form-control" name="code" id="code">
-                    </div>
-                    <div class="col-sm-2">
-                        <label>Name</label>
-                        <input type="text" class="form-control" name="nameinpt" id="nameinpt">
-                    </div>
-                    <div class="col-sm-2">
-                        <label>Kategori</label>
-                        <select name="kategori" id="kategori"  class="form-control select2" required="">
-                            <option value="">Pilih Data</option>
-                            @foreach($kategori as $val)
-                                <option value="{{$val->id}}">{{$val->name_kategori}}</option>
-                            @endforeach
-                        </select>
-                    </div>
+            <div class="row">
+                <div class="col-sm-2">
+                    <label>Code</label>
+                    <input type="text" class="form-control" name="code" id="code" value="{{$item->Code}}">
                 </div>
-                <div class="row">
-                    <div class="col-sm-4">
-                        <label>Brand</label>
-                        <input type="text" class="form-control" name="brand" id="brand">
-                    </div>
+                <div class="col-sm-2">
+                    <label>Name</label>
+                    <input type="text" class="form-control" name="nameinpt" id="nameinpt" value="{{$item->Name}}">
+                </div>
+                <div class="col-sm-2">
+                    <label>Kategori</label>
+                    <select name="kategori" id="kategori"  class="form-control select2">
+                        <option value="">Pilih Data</option>
+                        @foreach($kategori as $val)
+                            @if($val->id==$item->id_category)
+                                <option value="{{$val->id}}" selected>{{$val->name_kategori}}</option>
+                            @else
+                                <option value="{{$val->id}}">{{$val->name_kategori}}</option>
+                            @endif
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-sm-4">
+                    <label>Image</label>
+                    <img src="{{ url('public/Image/'.$image->image) }}" style="height: 100px; width: 150px;">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <label>Brand</label>
+                    <input type="text" class="form-control" name="brand" id="brand" value="{{$item->Brand}}">
                 </div>
             </div>
         </div>
-    <div class="card-header">
-        <h4>Tambah Data Detail</h4>
-    </div>
-    <div class="card-body">
         <div class="form-group">
-        <label>Upload Image</label>
-        <input type="file" class="form-control" name="image" >
+            <label>Upload Image</label>
+            <input type="file" class="form-control" name="image" id="image">
         </div>
+        <a class="btn btn-success" id="addBtn">add</a>
         <div class="form-group">
-            <label>Add Item</label><br>
-            {{--<button id="LeftMove" class="btn btn-primary" style="float:left;">&laquo; left</button>--}}
-            <a class="btn btn-success" id="addBtn">add</a>
-        <table class="table table-striped" id="table2">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Name</th>
-                    <th>Jumlah</th>
-                </tr>
-            </thead>
-            <tbody id="body2" name="body2">
-               
-            </tbody>
-        </table>
+            <table class="table table-striped" id="table2">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama</th>
+                        <th>Qty</th>
+                    </tr>	
+                </thead>
+                <tbody>
+                    @foreach($itemUnit as $key => $val)
+                        <tr>
+                            <td>{{$i}}</td>
+                            <td>{{$val->name}}<input type="text" id="name[{{$i}}]" name="name[{{$i}}]" value="{{$val->name}}" class="form-control" hidden></td>
+                            <th><input type="text" id="idput[{{$i}}]" name="idput[{{$i}}]" value="{{$val->Qty}}" class="form-control"></th>
+                            <th hidden>{{$i++}}</th>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
     </div>
-    
     <div class="card-footer text-right">
         <a class="btn btn-secondary" href="{{ route('formtable.index') }}">Back</a>
         <button class="btn btn-primary">Submit</button>
@@ -82,8 +89,8 @@
 </div>
 </div>
 
-
 @endsection
+
 @push('modal_place')
 <div class="modal fade" tabindex="-1" role="dialog" id="exampleModal">
     <div class="modal-dialog" role="document">
@@ -106,11 +113,10 @@
             <tbody>
                 @foreach($list as $key => $val)
                     <tr>
-                        <td>{{$i++}}</td>
-                        <td>{{$val->name}} <input type="text" id="name[]" name="name[]" value="{{$val->name}}" hidden></td>
+                        <td>{{$j++}} <input type="text" id="nameEdit[]" name="nameEdit[]" value="{{$val->name}}" hidden></td>
+                        <td>{{$val->name}}</td>
                         <th><input type="checkbox" id="check" name="checkbox"></th>
-                        <th hidden><input type="text" id="idput[]" name="idput[]" class="form-control"></th>
-                        <th hidden>{{$j++}}</th>
+                        <th hidden><input type="text" id="idputEdit[]" name="idputEdit[]" class="form-control"></th>
                     </tr>
                 @endforeach
             </tbody>
@@ -141,13 +147,17 @@
         const table = Array.from(table2.querySelectorAll("tr"), (tr) =>
           Array.from(tr.querySelectorAll("td"), (td) => td.textContent)
         );
-        var datatable = arrayColumn(table, 0);
+        // var datatable = arrayColumn(table, 0);
+        var datatable = arrayColumn(table, 1);
         var arrayLength = datatable.length;
-
+        // alert(datatable);
+        // return;
         for (var i = 0; i < xcheckbox.length; i++) {
           if (xcheckbox[i].checked) {
             for (var j = 0; j < arrayLength; j++) {
-              if (table1.rows[i + 1].cells[0].innerHTML === datatable[j]) {
+                // alert(table1.rows[i + 1].cells[1].innerHTML);
+                // return;
+              if (table1.rows[i + 1].cells[1].innerHTML === datatable[j]) {
                 alert("data is already");
                    return false;
               }
