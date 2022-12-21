@@ -44,7 +44,7 @@
                 </div>
                 <div class="col-sm-4">
                     <label>Image</label>
-                    <img src="{{ url('public/Image/'.$image->image) }}" style="height: 100px; width: 150px;">
+                    <img src="{{ url('public/Image/'.$item->xPicture) }}" style="height: 100px; width: 150px;">
                 </div>
             </div>
             <div class="row">
@@ -190,7 +190,7 @@
         // var del=body2.rows[id];
         // alert(id);
         // alert(body2.rows.length);
-        alert(id);
+        // alert(id);
         if (body2.rows.length<=1) {
             body2.deleteRow(0);
         }else{

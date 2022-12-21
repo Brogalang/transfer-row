@@ -19,7 +19,7 @@ class FormTable extends Controller
     {
         // $item = M_Item::get();
         $item = DB::table('m_item')
-                    ->select('m_item.id as id','postimages.image','kategori.name_kategori','m_item.Code','m_item.Name','m_item.Brand')
+                    ->select('m_item.id as id','postimages.image','kategori.name_kategori','m_item.Code','m_item.Name','m_item.Brand','m_item.xPicture')
                     ->leftjoin('postimages', 'postimages.id_header', '=', 'm_item.id')
                     ->leftjoin('kategori', 'kategori.id', '=', 'm_item.id_category')
                     ->where('m_item.id_unit','=',NULL)
@@ -69,12 +69,22 @@ class FormTable extends Controller
         // print_r($request->name);
         // die();
         ## Insert Header
+        if($request->file('image')){
+            $file= $request->file('image');
+            $filename= date('YmdHi').$file->getClientOriginalName();
+            $file-> move(public_path('public/Image'), $filename);
+            // $data['image']= $filename;
+            // $data['id_header']= $head_id;
+        }else{
+            $filename="";
+        }
         $head_id=M_Item::insertGetId([
             'Code' => $request->code,
             'id_branch' => '1',
             'Name' => $request->nameinpt,
             'id_category' => $request->kategori,
             'brand' => $request->brand,
+            'xPicture' => $filename,
             'created_at' => date('Y-m-d h:i:s'),
             'updated_at' => date('Y-m-d h:i:s')
         ]);
@@ -91,16 +101,6 @@ class FormTable extends Controller
                 ]);
             }
         }
-        $data= new M_FormTable();
-
-        if($request->file('image')){
-            $file= $request->file('image');
-            $filename= date('YmdHi').$file->getClientOriginalName();
-            $file-> move(public_path('public/Image'), $filename);
-            $data['image']= $filename;
-            $data['id_header']= $head_id;
-        }
-        $data->save();
         return redirect()->route('formtable.index');
     }
 

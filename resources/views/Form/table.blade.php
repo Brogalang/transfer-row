@@ -57,7 +57,7 @@
                 @endforeach
             </td>
             <td>
-                <img src="{{ url('public/Image/'.$val->image) }}" style="height: 100px; width: 150px;">
+                <img src="{{ url('public/Image/'.$val->xPicture) }}" style="height: 100px; width: 150px;">
             </td>
             
             <td>
